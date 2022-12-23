@@ -1,0 +1,47 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.6.7"
+}
+
+version = "0.1"
+group = "com.demo"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut:micronaut-graal")
+    implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    implementation("io.micronaut:micronaut-validation")
+    compileOnly("org.graalvm.nativeimage:svm")
+    implementation("io.micronaut.aws:micronaut-function-aws")
+    implementation("com.google.code.findbugs:jsr305:3.0.2")
+
+    implementation("io.micronaut.aws:micronaut-function-aws-custom-runtime")
+}
+
+application {
+    mainClass.set("com.demo.FunctionLambdaRuntime")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("11")
+    targetCompatibility = JavaVersion.toVersion("11")
+}
+
+micronaut {
+    runtime("lambda_java")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("com.demo.*")
+    }
+}
+
+
+
